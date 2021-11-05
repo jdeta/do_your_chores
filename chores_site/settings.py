@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [env('HOSTS')]
 # Application definition
 
 INSTALLED_APPS = [
+    'do_your_chores.apps.DoYourChoresConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
