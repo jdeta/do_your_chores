@@ -17,5 +17,8 @@ class HouseholdTests(TestCase):
         name_length = test_house._meta.get_field('name').max_length
         self.assertEqual(name_length, 32)
 
+    def test_name_string_output(self):
+        test_house = Household.objects.get(pk=self.obj_id)
+        self.assertEqual(test_house.name, str(test_house.name))
 
 

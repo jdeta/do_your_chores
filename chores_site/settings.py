@@ -12,10 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
-import os
 
 
-#initialize environment variables
+# initialize environment variables
 env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
