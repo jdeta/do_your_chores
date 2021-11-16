@@ -5,10 +5,11 @@ class HouseholdTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.test_household = Household.objects.create(name='Hill House')
+        cls.obj_id = Household.objects.create(name='Hill House').pk
     
     def test_name_label(self):
-        name_label = Household.objects.get(pk=self.test_household.pk)._meta.get_field('name').verbose_name
+        test_house = Household.objects.get(pk=self.obj_id)
+        name_label = test_house._meta.get_field('name').verbose_name
         self.assertEqual(name_label, 'name')
 
     def test_name_max_length(self):
@@ -19,4 +20,5 @@ class HouseholdTests(TestCase):
     def test_name_string_output(self):
         test_house = Household.objects.get(pk=self.obj_id)
         self.assertEqual(test_house.name, str(test_house.name))
+
 
