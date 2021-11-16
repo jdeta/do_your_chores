@@ -1,7 +1,7 @@
 from django.urls import path 
-from . import views
+from .views import ChoreBoard
 
 app_name = 'chores'
 urlpatterns = [
-    path('', views.chores_board, name='chores_board'),
+    path('', ChoreBoard.as_view(), name='chores_board'),
     ]
