@@ -8,8 +8,7 @@ class CommonFields(models.Model):
         abstract = True
 
     def __str__(self):
-        return f'{self.name}'
-
+       return f'{self.name}'
 
 class Household(CommonFields):
 
@@ -19,15 +18,10 @@ class Household(CommonFields):
 class Member(CommonFields):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.name}'
-
 
 class Task(CommonFields):
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def __str__(self):
-        return f'{self.owner}'
 
 
 
