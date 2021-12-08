@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 
 class CommonFields(models.Model):
     name = models.CharField(max_length=32)
@@ -12,11 +12,14 @@ class CommonFields(models.Model):
 
 class Household(CommonFields):
 
-    pass
-
+    def get_absolute_url(self):
+        return reverse('chores:house_detail', args=[self.id])
 
 class Member(CommonFields):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('chores:member_detail', args=[self.id])
 
 
 class Task(CommonFields):

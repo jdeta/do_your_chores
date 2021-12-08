@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET')
 DEBUG = True
 
 ALLOWED_HOSTS = [env('HOSTS')]
-
+#ALLOWED_HOSTS = [ '127.0.0.1', 'localhost', 'testserver',]
 
 # Application definition
 

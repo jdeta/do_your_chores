@@ -24,6 +24,10 @@ class HouseholdTests(TestCase):
     def test_subclass_house_common(self):
         self.assertTrue(issubclass(Household, CommonFields))
 
+    def test_get_absolute_url(self):
+        test_house_url = Household.objects.get(pk=self.test_household.pk)
+        self.assertEqual(test_house_url.get_absolute_url(), '/house/1')
+
 class MemberTests(TestCase):
 
     @classmethod
@@ -38,6 +42,10 @@ class MemberTests(TestCase):
 
     def test_subclass_member_common(self):
         self.assertTrue(issubclass(Member, CommonFields))
+
+    def test_get_absolute_member_url(self):
+        test_member_url = Member.objects.get(pk=self.test_household.pk)
+        self.assertEqual(test_member_url.get_absolute_url(), '/member/1')
 
 class TaskTests1(TestCase):
 
