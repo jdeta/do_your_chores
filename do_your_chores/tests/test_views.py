@@ -31,4 +31,15 @@ class NewHouseholdTests(TestCase):
 
     def test_new_house_redirect(self):
         self.assertEqual(self.response.redirect_chain[-1][1], 302)
-        self.assertEqual(self.response.redirect_chain[-1][0], 'do_your_chores/member_form.html')
+        self.assertEqual(self.response.redirect_chain[-1][0], '/member/new')
+
+class NewTaskTests(TestCase):
+    
+    def test_new_task_redirect(self):
+        self.client = Client()
+        self.task_url = reverse('chores:new_task')
+        self.response = self.client.post(self.task_url, {
+            'name': 'sweep',}, follow=True)
+
+        self.assertEqual(self.response.redirect_chain[-1][1], 302)
+        self.assertEqual(self.response.redirect_chain[-1][0], '/house/1')

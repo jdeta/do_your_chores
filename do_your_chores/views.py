@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic.edit import View, CreateView
+from django.views.generic.edit import View, CreateView, DeleteView
 from django.views.generic.detail import DetailView
 
-from .models import Household, Member
+from .models import Household, Member, Task
 
 class ChoreBoard(View):
 
@@ -21,8 +21,26 @@ class NewMember(CreateView):
     model = Member
     fields = ['house', 'name']
 
+class NewTask(CreateView):
+    model = Task
+    fields = ['name', 'owner']
+    success_url = '/house/1' #make this fella dynamic af
+
 class HouseholdDetail(DetailView):
-    pass
+    model = Household
 
 class MemberDetail(DetailView):
-    pass
+    model = Member
+
+class TaskDetail(DetailView):
+    model = Task
+
+class DeleteHouse(DeleteView):
+    model = Household
+
+class DeleteMember(DeleteView):
+    model = Member
+
+class DeleteTask(DeleteView):
+    model = Task
+

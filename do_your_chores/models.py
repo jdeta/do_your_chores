@@ -13,17 +13,20 @@ class CommonFields(models.Model):
 class Household(CommonFields):
 
     def get_absolute_url(self):
-        return reverse('chores:house_detail', args=[self.id])
+        return reverse('chores:house_detail', args=[self.pk])#slugify
 
 class Member(CommonFields):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('chores:member_detail', args=[self.id])
+        return reverse('chores:member_detail', args=[self.pk])
 
 
 class Task(CommonFields):
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('chores:task_detail', args=[self.pk])
 
 
 
