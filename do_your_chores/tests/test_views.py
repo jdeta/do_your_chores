@@ -8,14 +8,13 @@ class ChoreBoardViewTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.board_url = reverse('chores:chores_board')
+        self.response = self.client.get(self.board_url)
 
     def test_board_url_exists(self):
-        response = self.client.get(self.board_url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.response.status_code, 200)
 
     def test_board_template(self):
-        response = self.client.get(self.board_url)
-        self.assertTemplateUsed(response, 'do_your_chores/chores_board.html')
+        self.assertTemplateUsed(self.response, 'do_your_chores/chores_board.html')
 
 class NewHouseholdTests(TestCase):
 
@@ -33,13 +32,20 @@ class NewHouseholdTests(TestCase):
         self.assertEqual(self.response.redirect_chain[-1][1], 302)
         self.assertEqual(self.response.redirect_chain[-1][0], '/member/new')
 
+
 class NewTaskTests(TestCase):
     
-    def test_new_task_redirect(self):
+    def setUp(self):
         self.client = Client()
         self.task_url = reverse('chores:new_task')
+        self.test_house = Household.objects.create(name='Hill House')
+        self.test_member = Member.objects.create(name='j-money', house=self.test_house)
         self.response = self.client.post(self.task_url, {
-            'name': 'sweep',}, follow=True)
+            'name':'sweep',
+            'owner':self.test_member,
+            }, follow=True)
 
-        self.assertEqual(self.response.redirect_chain[-1][1], 302)
+    def test_new_task_redirect(self):
+        self.assertRedirects(self.response, '/house/1', 302)
+        self.assertEqual(self.response.redirect_chain, 302)
         self.assertEqual(self.response.redirect_chain[-1][0], '/house/1')

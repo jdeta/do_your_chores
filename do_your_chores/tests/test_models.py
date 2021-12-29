@@ -44,7 +44,7 @@ class MemberTests(TestCase):
         self.assertTrue(issubclass(Member, CommonFields))
 
     def test_get_absolute_member_url(self):
-        test_member_url = Member.objects.get(pk=self.test_household.pk)
+        test_member_url = Member.objects.get(pk=self.test_member.pk)
         self.assertEqual(test_member_url.get_absolute_url(), '/member/1')
 
 class TaskTests1(TestCase):
@@ -59,12 +59,18 @@ class TaskTests1(TestCase):
         owner_label = check_task._meta.get_field('owner').verbose_name
         self.assertEqual(owner_label, 'owner')
 
+    def test_frequency_label(self):
+        check_frequency = Task.objects.get(pk=self.test_task.pk)
+        frequency_label = check_frequency._meta.get_field('frequency').verbose_name
+        self.assertEqual(frequency_label, 'frequency')
+
     def test_subclass_task_common(self):
         self.assertTrue(issubclass(Task, CommonFields))
 
     def test_no_owner(self):
         missing_owner = Task.objects.get(pk=self.test_task.pk).owner
         self.assertIsNone(missing_owner)
+
 
 class TaskTest2(TestCase):
 
@@ -78,3 +84,7 @@ class TaskTest2(TestCase):
     def test_owner_exists(self):
         found_owner = Task.objects.get(pk=self.test_task.pk).owner
         self.assertIsNotNone(found_owner)
+        
+    def test_get_absolute_task_url(self):
+        test_task_url = Task.objects.get(pk=self.test_task.pk)
+        self.assertEqual(test_task_url.get_absolute_url(), '/task/1')

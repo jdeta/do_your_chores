@@ -13,7 +13,7 @@ class CommonFields(models.Model):
 class Household(CommonFields):
 
     def get_absolute_url(self):
-        return reverse('chores:house_detail', args=[self.pk])#slugify
+        return reverse('chores:household_detail', args=[self.pk])#slugify
 
 class Member(CommonFields):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
@@ -23,7 +23,13 @@ class Member(CommonFields):
 
 
 class Task(CommonFields):
+
+    class TaskFrequency(models.IntegerChoices):
+        daily = 1, 'daily'
+        weekly = 2, 'weekly'
+
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
 
     def get_absolute_url(self):
         return reverse('chores:task_detail', args=[self.pk])
