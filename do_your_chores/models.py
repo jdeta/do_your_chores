@@ -10,10 +10,31 @@ class CommonFields(models.Model):
     def __str__(self):
        return f'{self.name}'
 
+
+class Week(models.Model):
+    pass
+
+
+class Day(models.Model):
+    
+    class DaysOfWeek(models.IntegerChoices):
+        monday = 1, 'Monday'
+        tuesday = 2, 'Tuesday'
+        wednesday = 3, 'Wednesday'
+        thursday = 4, 'Thursday'
+        friday = 5, 'Friday'
+        saturday = 6, 'Saturday'
+        sunday = 7, 'Sunday'
+        
+    day = models.PositiveSmallIntegerField(choices=DaysOfWeek.choices)
+    week = models.ForeignKey(Week, on_delete=models.CASCADE)
+
+
 class Household(CommonFields):
 
     def get_absolute_url(self):
         return reverse('chores:household_detail', args=[self.pk])#slugify
+
 
 class Member(CommonFields):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
@@ -33,7 +54,3 @@ class Task(CommonFields):
 
     def get_absolute_url(self):
         return reverse('chores:task_detail', args=[self.pk])
-
-
-
-
