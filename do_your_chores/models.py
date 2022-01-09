@@ -51,6 +51,7 @@ class Task(CommonFields):
 
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
+    day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('chores:task_detail', args=[self.pk])
