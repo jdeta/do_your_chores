@@ -12,7 +12,9 @@ class CommonFields(models.Model):
 
 
 class Week(models.Model):
-    pass
+
+    class Meta:
+        get_latest_by = 'pk'
 
 
 class Day(models.Model):

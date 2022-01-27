@@ -32,7 +32,12 @@ SECRET_KEY = env('SECRET')
 DEBUG = True
 
 ALLOWED_HOSTS = [env('HOSTS')]
-#ALLOWED_HOSTS = [ '127.0.0.1', 'localhost', 'testserver',]
+
+#Slack API configuration
+SLACK_CLIENT_ID = [env('SLACK_CLIENT_ID')]
+SLACK_CLIENT_SECRET = [env('SLACK_CLIENT_SECRET')]
+SLACK_VERIFICATION_TOKEN = [env('SLACK_VERIFICATION_TOKEN')]
+SLACK_BOT_USER_OATH_TOKEN = [env('SLACK_BOT_USER_OATH_TOKEN')]
 
 # Application definition
 
