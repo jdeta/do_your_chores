@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-class CommonFields(models.Model):
+class NameField(models.Model):
     name = models.CharField(max_length=32)
 
     class Meta:
@@ -10,15 +10,8 @@ class CommonFields(models.Model):
     def __str__(self):
        return f'{self.name}'
 
+class DayField(models.Model):
 
-class Week(models.Model):
-
-    class Meta:
-        get_latest_by = 'pk'
-
-
-class Day(models.Model):
-    
     class DaysOfWeek(models.IntegerChoices):
         monday = 1, 'Monday'
         tuesday = 2, 'Tuesday'
@@ -27,8 +20,20 @@ class Day(models.Model):
         friday = 5, 'Friday'
         saturday = 6, 'Saturday'
         sunday = 7, 'Sunday'
-        
+
     day = models.PositiveSmallIntegerField(choices=DaysOfWeek.choices)
+
+    class Meta:
+        abstract = True
+
+
+class Week(models.Model):
+
+    class Meta:
+        get_latest_by = 'pk'
+
+
+class Day(DayField):
     week = models.ForeignKey(Week, on_delete=models.CASCADE)
 
 
@@ -45,15 +50,19 @@ class Member(CommonFields):
         return reverse('chores:member_detail', args=[self.pk])
 
 
-class Task(CommonFields):
+class TaskList(NameField,DayField):
 
     class TaskFrequency(models.IntegerChoices):
         daily = 1, 'daily'
         weekly = 2, 'weekly'
 
-    owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
-    day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def get_absolute_url(self):
         return reverse('chores:task_detail', args=[self.pk])
+
+class AssignedTask(CommonFields):
+    owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
+    is_complete = models.BooleanField()
