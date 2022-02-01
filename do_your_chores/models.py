@@ -21,7 +21,7 @@ class DayField(models.Model):
         saturday = 6, 'Saturday'
         sunday = 7, 'Sunday'
 
-    day = models.PositiveSmallIntegerField(choices=DaysOfWeek.choices)
+    day = models.PositiveSmallIntegerField(choices=DaysOfWeek.choices, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -37,14 +37,15 @@ class Day(DayField):
     week = models.ForeignKey(Week, on_delete=models.CASCADE)
 
 
-class Household(CommonFields):
+class Household(NameField):
 
     def get_absolute_url(self):
         return reverse('chores:household_detail', args=[self.pk])#slugify
 
 
-class Member(CommonFields):
+class Member(NameField):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
+    slack_id = models.CharField(max_length=24)
 
     def get_absolute_url(self):
         return reverse('chores:member_detail', args=[self.pk])
@@ -62,7 +63,7 @@ class TaskList(NameField,DayField):
     def get_absolute_url(self):
         return reverse('chores:task_detail', args=[self.pk])
 
-class AssignedTask(CommonFields):
+class AssignedTask(NameField):
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
     is_complete = models.BooleanField()

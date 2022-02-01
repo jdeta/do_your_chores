@@ -3,7 +3,7 @@ from django.views.generic.edit import View, CreateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 
-from .models import Household, Member, Task
+from .models import Household, Member, TaskList
 
 class ChoreBoard(View):
 
@@ -23,7 +23,7 @@ class NewMember(CreateView):
     fields = ['house', 'name']
 
 class NewTask(CreateView):
-    model = Task
+    model = TaskList
     fields = ['name', 'owner']
 
     def get_success_url(self):
@@ -38,7 +38,7 @@ class MemberDetail(DetailView):
     model = Member
 
 class TaskDetail(DetailView):
-    model = Task
+    model = TaskList
 
 class DeleteHousehold(DeleteView):
     model = Household
@@ -49,6 +49,6 @@ class DeleteMember(DeleteView):
     success_url = '/'
 
 class DeleteTask(DeleteView):
-    model = Task
+    model = TaskList
     success_url = '/'
 
