@@ -37,10 +37,13 @@ class Command(BaseCommand):
         needs_chores = Member.objects.all()
         latest_tasks = AssignedTask.objects.filter(day__week__pk=new_week.pk)
         for i in latest_tasks[::2]:
+            i.owner = needs_chores[0]
+            print(i.owner)
+            i.save()
 
-
-            print(i)
-
+        for i in latest_tasks[1::2]:
+            i.owner = needs_chores[1]
+            i.save()
 
 
         self.stdout.write(self.style.SUCCESS('Successfully created new week'))
