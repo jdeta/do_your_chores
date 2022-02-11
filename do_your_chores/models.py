@@ -33,7 +33,7 @@ class DayField(models.Model):
 class Week(models.Model):
 
     class Meta:
-        get_latest_by = 'pk'
+        get_latest_by = 'pk'#TODO - do I need this? NO
 
 
 class Day(DayField):
@@ -48,7 +48,7 @@ class Household(NameField):
 
 class Member(NameField):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
-    slack_id = models.CharField(max_length=24)
+    slack_memberid = models.CharField(max_length=24)
 
     def get_absolute_url(self):
         return reverse('chores:member_detail', args=[self.pk])
