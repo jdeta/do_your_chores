@@ -30,10 +30,20 @@ class DayField(models.Model):
         return f'{self.day}'
 
 
-class Week(models.Model):
+class FrequencyField(models.Model):
+    
+    class TaskFrequency(models.IntegerChoices):
+        daily = 1, 'daily'
+        weekly = 2, 'weekly'
+
+    frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
 
     class Meta:
-        get_latest_by = 'pk'#TODO - do I need this? NO
+        abstract = True
+
+
+class Week(models.Model):
+    pass
 
 
 class Day(DayField):
@@ -41,32 +51,20 @@ class Day(DayField):
 
 
 class Household(NameField):
+    pass
 
-    def get_absolute_url(self):
-        return reverse('chores:household_detail', args=[self.pk])#slugify
 
 
 class Member(NameField):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
     slack_memberid = models.CharField(max_length=24)
 
-    def get_absolute_url(self):
-        return reverse('chores:member_detail', args=[self.pk])
+
+class TaskList(NameField,DayField,FrequencyField):
+    pass
 
 
-class TaskList(NameField,DayField):
-
-    class TaskFrequency(models.IntegerChoices):
-        daily = 1, 'daily'
-        weekly = 2, 'weekly'
-
-    frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
-
-
-    def get_absolute_url(self):
-        return reverse('chores:task_detail', args=[self.pk])
-
-class AssignedTask(NameField):
+class AssignedTask(NameField,FrequencyField):
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
     is_complete = models.BooleanField()
