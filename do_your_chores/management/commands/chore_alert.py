@@ -20,30 +20,27 @@ class Command(BaseCommand):
         this_week = Week.objects.latest()
         today_iso = datetime.date.today().isoweekday()
         today = Day.objects.get(day=today_iso,week=this_week)
-        todays_chores = AssignedTask.objects.filter(day__week=this_week,day=today)
+        todays__weekly_chores = AssignedTask.objects.filter(day__week=this_week,day=today,frequency=2)
+        todays_daily_chores = AssignedTask.objects.filter(day__week=this_week,day=today,frequency=1)
 
         #slack_token = settings.SLACK_BOT_USER_OATH_TOKEN
         client = WebClient(token='xoxb-2965492515603-2984605078993-dWZuPOegc7ShTTVWAL8OXQmL')
        
+        for i in todays_daily_chores:
+            message = 'Daily reminder to {}'.format(i.name)
+            try:
+                response = client.chat_postMessage(channel='chores',text=message)
+            except SlackApiError as e:
+                assert e.response["error"]
 
 
 
-        for i in todays_chores:
+        for i in todays_weekly_chores:
             message = 'Assigned Chore: {}'.format(i.name)
             try:
                 response = client.chat_postMessage(channel=i.owner.slack_memberid, text=message)
             except SlackApiError as e:
                 assert e.response["error"]
-            print(i.owner.slack_memberid)
-            #to_assign = Member.objects.get(name=i.owner)
-            #print(to_assign)
-
-
-
-
-
-#latest_tasks = AssignedTask.objects.filter(day__week__pk=new_week.pk)
-
 
 
 
