@@ -43,7 +43,9 @@ class FrequencyField(models.Model):
 
 
 class Week(models.Model):
-    pass
+
+    class Meta:
+        get_latest_by = 'pk'
 
 
 class Day(DayField):
@@ -51,20 +53,26 @@ class Day(DayField):
 
 
 class Household(NameField):
-    pass
 
+    def get_absolute_url(self):
+        return reverse('chores:household_detail', args=[self.pk])#slugify
 
 
 class Member(NameField):
     house = models.ForeignKey(Household, on_delete=models.CASCADE)
     slack_memberid = models.CharField(max_length=24)
 
+    def get_absolute_url(self):
+        return reverse('chores:member_detail', args=[self.pk])
+
 
 class TaskList(NameField,DayField,FrequencyField):
-    pass
+
+    def get_absolute_url(self):
+        return reverse('chores:task_detail', args=[self.pk])
 
 
 class AssignedTask(NameField,FrequencyField):
     owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    day = models.ForeignKey(Day, on_delete=models.SET_NULL, null=True, blank=True)
+    day = models.ForeignKey(Day, on_delete=models.CASCADE)
     is_complete = models.BooleanField()
