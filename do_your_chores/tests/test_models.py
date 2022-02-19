@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from do_your_chores.models import (
         Household, Member, TaskList, NameField,
-        DayField, FrequencyField, Week, Day
+        DayField, FrequencyField, Week, Day, AssignedTask
         )
 
 
@@ -31,18 +31,25 @@ class HouseholdTests(TestCase):
 
     def test_get_absolute_url(self):
         test_house_url = Household.objects.get(pk=self.test_household.pk)
-        self.assertEqual(test_house_url.get_absolute_url(), '/house/1')
+        self.assertEqual(
+                test_house_url.get_absolute_url(), 
+                '/house/{}'.format(self.test_household.pk)
+                )
 
 class MemberTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.test_household = Household.objects.create(name='Hill House')
-        cls.test_member = Member.objects.create(name='Joe',house=cls.test_household,slack_memberid='blahblah')
+        cls.test_member = Member.objects.create(
+                name='Joe',house=cls.test_household,slack_memberid='blahblah'
+                )
 
     def test_slack_label(self):
         check_member = Member.objects.get(pk=self.test_member.pk)
-        slack_label = check_member._meta.get_field('slack_memberid').verbose_name
+        slack_label = check_member._meta.get_field(
+                'slack_memberid'
+                ).verbose_name
         self.assertEqual(slack_label, 'slack memberid')
 
     def test_subclass_member_namefield(self):
@@ -50,7 +57,9 @@ class MemberTests(TestCase):
 
     def test_get_absolute_member_url(self):
         test_member_url = Member.objects.get(pk=self.test_member.pk)
-        self.assertEqual(test_member_url.get_absolute_url(), '/member/1')
+        self.assertEqual(test_member_url.get_absolute_url(), 
+                '/member/{}'.format(self.test_member.pk)
+                )
 
     def test_household_exists(self):
         self.assertEqual(self.test_member.house.name, 'Hill House')
@@ -64,7 +73,9 @@ class TaskListTests1(TestCase):
 
     def test_frequency_label(self):
         check_frequency = TaskList.objects.get(pk=self.test_task.pk)
-        frequency_label = check_frequency._meta.get_field('frequency').verbose_name
+        frequency_label = check_frequency._meta.get_field(
+                'frequency'
+                ).verbose_name
         self.assertEqual(frequency_label, 'frequency')
 
     def test_day_label(self):
@@ -118,5 +129,53 @@ class AssignedTaskTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.no_owner_task = AssignedTask.objects.create(name='vacuum',
+        cls.test_week = Week.objects.create()
+        cls.test_day = Day.objects.create(week=cls.test_week)
+        cls.test_household = Household.objects.create(name='House Stark')
+        cls.test_member = Member.objects.create(
+                name='Brandon Stark',house=cls.test_household,
+                slack_memberid='poop'
+                )
+        cls.daily_task = AssignedTask.objects.create(
+                name='vacuum',owner=None,day=cls.test_day,is_complete=False,
+                )
+        cls.weekly_task = AssignedTask.objects.create(
+                name='laundry', owner=cls.test_member,
+                day=cls.test_day, is_complete=False
+                )
+
+    def test_owner_label(self):
+        check_owner = AssignedTask.objects.get(pk=self.daily_task.pk)
+        owner_label = check_owner._meta.get_field('owner').verbose_name
+        self.assertEqual(owner_label, 'owner')
+
+    def test_day_label(self):
+        check_day = AssignedTask.objects.get(pk=self.daily_task.pk)
+        day_label = check_day._meta.get_field('day').verbose_name
+        self.assertEqual(day_label, 'day')
+
+    def test_complete_label(self):
+        check_complete = AssignedTask.objects.get(pk=self.daily_task.pk)
+        complete_label = check_complete._meta.get_field(
+                'is_complete'
+                ).verbose_name
+        self.assertEqual(complete_label, 'is complete')
+
+    def test_subclass_namefield(self):
+        self.assertTrue(issubclass(AssignedTask, NameField))
+
+    def test_subclass_frequencyfield(self):
+        self.assertTrue(issubclass(AssignedTask, FrequencyField))
+
+    def test_owner_extist(self):
+        self.assertEqual(self.weekly_task.owner.name, 'Brandon Stark')
+
+    def test_day_exists(self):
+        self.assertEqual(self.weekly_task.day, self.test_day)
+
+    def test_owner_isnull(self):
+        self.assertEqual(self.daily_task.owner, None)
+
+    def test_day_isnull(self):
+        self.assertEqual(self.daily_task.day, None)
 

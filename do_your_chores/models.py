@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 class NameField(models.Model):
     name = models.CharField(max_length=32)
 
@@ -9,6 +10,7 @@ class NameField(models.Model):
 
     def __str__(self):
        return f'{self.name}'
+
 
 class DayField(models.Model):
 
@@ -21,7 +23,9 @@ class DayField(models.Model):
         saturday = 6, 'Saturday'
         sunday = 7, 'Sunday'
 
-    day = models.PositiveSmallIntegerField(choices=DaysOfWeek.choices, null=True, blank=True)
+    day = models.PositiveSmallIntegerField(
+            choices=DaysOfWeek.choices, null=True, blank=True
+            )
 
     class Meta:
         abstract = True
@@ -36,7 +40,9 @@ class FrequencyField(models.Model):
         daily = 1, 'daily'
         weekly = 2, 'weekly'
 
-    frequency = models.PositiveSmallIntegerField(choices=TaskFrequency.choices,default=TaskFrequency.daily)
+    frequency = models.PositiveSmallIntegerField(
+            choices=TaskFrequency.choices,default=TaskFrequency.daily
+            )
 
     class Meta:
         abstract = True
@@ -73,6 +79,10 @@ class TaskList(NameField,DayField,FrequencyField):
 
 
 class AssignedTask(NameField,FrequencyField):
-    owner = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    day = models.ForeignKey(Day, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+            Member, on_delete=models.CASCADE, null=True, blank=True
+            )
+    day = models.ForeignKey(
+            Day, on_delete=models.CASCADE, null=True, blank=True
+            )
     is_complete = models.BooleanField()
