@@ -1,14 +1,23 @@
+import datetime
+
 from django.shortcuts import render
 from django.views.generic.edit import View, CreateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 
-from .models import Household, Member, TaskList
+from .models import Household, Member, TaskList, Week, Day, AssignedTask
+
 
 class ChoreBoard(View):
 
     def get(self, request):
-        context = {}
+        this_week = Week.objects.latest()
+        today_iso = datetime.date.today().isoweekday()#TODO this code exists in two spots
+        today = Day.objects.get(day=today_iso,week=this_week)
+        todays_chores = AssignedTask.objects.filter(
+                day__week=this_week,day=today
+                )
+        context = {'todays_chores':todays_chores}
         return render(request, 'do_your_chores/chores_board.html', context)
 
 

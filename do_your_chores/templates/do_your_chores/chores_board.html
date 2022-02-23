@@ -9,18 +9,16 @@
       <div class="board-column-header">Todo</div>
       <div class="board-column-content-wrapper">
         <div class="board-column-content">
-          <div class="board-item"><div class="board-item-content"><span>Item #</span>1</div></div>
-          <div class="board-item"><div class="board-item-content"><span>Item #</span>2</div></div>
-          <div class="board-item"><div class="board-item-content"><span>Item #</span>3</div></div>
-          <div class="board-item"><div class="board-item-content"><span>Item #</span>4</div></div>
-          <div class="board-item"><div class="board-item-content"><span>Item #</span>5</div></div>
+	{% for chore in todays_chores %}
+	<div class="board-item"><div class="board-item-content"><span>{{ chore.name }}</span>1</div></div>
+	{% endfor %}
         </div>
       </div>
     </div>
   </div>
   <div class="board-column working">
     <div class="board-column-container">
-      <div class="board-column-header">Working</div>
+      <div class="board-column-header">In Progress</div>
       <div class="board-column-content-wrapper">
         <div class="board-column-content">
           <div class="board-item"><div class="board-item-content"><span>Item #</span>6</div></div>
