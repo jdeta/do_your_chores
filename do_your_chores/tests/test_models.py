@@ -64,6 +64,7 @@ class MemberTests(TestCase):
     def test_household_exists(self):
         self.assertEqual(self.test_member.house.name, 'Hill House')
 
+
 class TaskListTests1(TestCase):
 
     #test a daily task
@@ -95,6 +96,7 @@ class TaskListTests1(TestCase):
     def test_get_absolute_task_url(self):
         test_task_url = TaskList.objects.get(pk=self.test_task.pk)
         self.assertEqual(test_task_url.get_absolute_url(), '/task/1')
+
 
 class WeekTests(TestCase):
 
