@@ -33,11 +33,11 @@ class NewMember(CreateView):
 
 class NewTask(CreateView):
     model = TaskList
-    fields = ['name', 'owner']
+    fields = ['name', 'day', 'frequency']
 
-    def get_success_url(self):
-        back_to_house = self.object.owner.house.pk
-        return reverse_lazy('chores:household_detail', args=[back_to_house])
+#    def get_success_url(self):
+#        back_to_house = self.object.owner.house.pk
+#        return reverse_lazy('chores:household_detail', args=[back_to_house])
 #    success_url = '/house/1' #make this fella dynamic af
 
 class HouseholdDetail(DetailView):

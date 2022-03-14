@@ -139,7 +139,7 @@ class AssignedTaskTests(TestCase):
                 slack_memberid='poop'
                 )
         cls.daily_task = AssignedTask.objects.create(
-                name='vacuum',owner=None,day=cls.test_day,is_complete=False,
+                name='vacuum',owner=None,day=None,is_complete=False,
                 )
         cls.weekly_task = AssignedTask.objects.create(
                 name='laundry', owner=cls.test_member,

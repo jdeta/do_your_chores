@@ -6,11 +6,11 @@
 <div class="board">
   <div class="board-column todo">
     <div class="board-column-container">
-      <div class="board-column-header">Todo</div>
+      <div class="board-column-header">To do</div>
       <div class="board-column-content-wrapper">
         <div class="board-column-content">
 	{% for chore in todays_chores %}
-	<div class="board-item"><div class="board-item-content"><span>{{ chore.name }}</span>1</div></div>
+	<div class="board-item"><div class="board-item-content"><span>{{ chore.name }}</span></div></div>
 	{% endfor %}
         </div>
       </div>
